@@ -206,3 +206,52 @@ def get_liked_playlists(yandex_username):
         driver.quit()
 
     return  liked_playlists_for_spotify
+
+
+def get_liked_on_radio(yandex_username):
+
+    liked_on_radio_id = 101
+
+    liked_on_radio_for_spotify = {}
+
+    url = 'https://music.yandex.ru/users/' + yandex_username + '/playlists/' + str(liked_on_radio_id)
+
+    driver = get_local_html_page('liked_on_radio', url)
+
+    mu_json = driver.execute_script('return Mu')
+
+    liked_on_radio = {}
+
+    all_track_ids = mu_json['pageData']['playlist']['trackIds']
+    playlist_name = mu_json['pageData']['playlist']['title']
+
+    for i in all_track_ids:
+        try:
+            track_id = re.findall(r'\d+(?=:)', i)[0]
+
+            driver.get(''.join(['https://music.yandex.ru/track/', track_id]))
+
+            liked_on_radio[i] = {}
+
+            try:
+                liked_on_radio[i]['track_name'] = \
+                    driver.find_elements_by_xpath("//span[@class='']//a[@class='d-link deco-link']")[0].text
+            except:
+                liked_on_radio[i]['track_name'] = ['']
+
+            try:
+                liked_on_radio[i]['artist_name'] = driver.find_elements_by_xpath(
+                    "//span[@class='d-artists']//a[@class='d-link deco-link']")[0].text
+            except:
+                liked_on_radio[i]['artist_name'] = ['']
+
+        except:
+            pass
+
+    liked_on_radio_for_spotify[playlist_name] = liked_on_radio
+
+    delete_local_html_page('liked_on_radio.html')
+
+    driver.quit()
+
+    return liked_on_radio_for_spotify

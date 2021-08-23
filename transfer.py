@@ -1,7 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy import oauth2
-from YM_to_Spotify_transfer import get_my_playlists, get_liked_playlists, get_albums
+from YM_to_Spotify_transfer import get_my_playlists, get_liked_playlists, get_albums, get_liked_on_radio
 
 
 def authorization():
@@ -96,12 +96,11 @@ def transfer_playlists(yandex_username, playlists_for_spotify):  # transfer play
             for new_spotify_playlist_id, track_id in new_spotify_playlist.items():
                 sp.playlist_add_items(track_id, new_spotify_playlist_id.split())
 
-#def get_liked_on_radio()
 
 
 def main(yandex_username):
 
-    transfer_playlists(yandex_username, get_my_playlists(yandex_username))
+    transfer_playlists(yandex_username, get_liked_on_radio(yandex_username))
 
 if __name__ == '__main__':
     yandex_username = "anton.mel"
