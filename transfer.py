@@ -2,11 +2,11 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy import oauth2
 from YM_to_Spotify_transfer import get_my_playlists, get_liked_playlists, get_albums, get_liked_on_radio
-
+from config import *
 
 def authorization():
-    client_id = '2dc3faf3fe9a4fb1ae0741d5889100e3'
-    client_secret = '1fc127a6a9f5430e951afa86bcb47d07'
+    client_id = CLIENT_ID
+    client_secret = CLIENT_SECRET
 
     scope = ('user-library-read,' +
              ' playlist-read-private,' +
@@ -103,6 +103,6 @@ def main(yandex_username):
     transfer_playlists(yandex_username, get_liked_on_radio(yandex_username))
 
 if __name__ == '__main__':
-    yandex_username = "anton.mel"
+    yandex_username = YANDEX_USERNAME
     main(yandex_username)
 
